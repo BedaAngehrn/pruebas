@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: Perspectiva del Maíz en Ameca (Julio-Octubre 2025)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- 
+    Plan de Narrativa y Estructura:
+    1.  Encabezado/Gancho: Título y resumen del doble riesgo (exceso vs. falta de agua).
+    2.  Sección 1 - El Clima que Conocemos: Datos históricos de Ameca (precipitación, suelo) para establecer una línea base.
+    3.  Sección 2 - El Pronóstico 2025: Qué esperar esta temporada (pronóstico de lluvia, ENOS, ciclones, riesgo de canícula).
+    4.  Sección 3 - Entendiendo al Maíz: Visualización de las necesidades hídricas del cultivo y el impacto del estrés.
+    5.  Sección 4 - El Doble Riesgo: Un análisis visual directo de los peligros de inundación y sequía.
+    6.  Sección 5 - Plan de Acción: Guía práctica y visual con estrategias de manejo y un resumen de los apoyos de SADER.
+    
+    Selección de Visualizaciones:
+    -   Dato: Precipitación Histórica (Tabla 1) -> Objetivo: Comparar/Cambio -> Visualización: Gráfico de Barras (Chart.js) -> Justificación: Ideal para comparar volúmenes entre meses y mostrar tendencias. CONFIRMACIÓN: NO SVG.
+    -   Dato: Composición del Suelo -> Objetivo: Informar/Composición -> Visualización: Gráfico de Dona (Chart.js) -> Justificación: Muestra claramente las proporciones de los tipos de suelo dominantes. CONFIRMACIÓN: NO SVG.
+    -   Dato: Precipitación Pronosticada (Tabla 2) -> Objetivo: Comparar/Cambio -> Visualización: Gráfico Combinado de Barras y Líneas (Chart.js) -> Justificación: Compara eficientemente dos métricas (mm y días de lluvia) en el mismo periodo. CONFIRMACIÓN: NO SVG.
+    -   Dato: Necesidades Hídricas del Maíz (Tabla 3) -> Objetivo: Cambio -> Visualización: Gráfico de Área (Chart.js) -> Justificación: Enfatiza el volumen y el pico de la demanda de agua durante el ciclo del cultivo. CONFIRMACIÓN: NO SVG.
+    -   Dato: Estadísticas Clave (ENSO, Ciclones) -> Objetivo: Informar -> Visualización: "Gran Número" (HTML/CSS) -> Justificación: Impacto visual directo para datos críticos puntuales. CONFIRMACIÓN: NO SVG.
+    -   Dato: Recomendaciones de Manejo -> Objetivo: Organizar -> Visualización: Diagrama de Flujo (HTML/CSS con Tailwind) -> Justificación: Guía visualmente al usuario a través de procesos y acciones recomendadas. CONFIRMACIÓN: NO SVG, NO MERMAID JS.
+
+    Paleta de Colores Seleccionada: Energetic & Playful (#003F5C, #BC5090, #FFA600)
+    
+    Confirmación de Restricciones Técnicas: NI MERMAID JS NI SVG fueron utilizados en la creación de este documento. La renderización de gráficos se realiza exclusivamente a través de la etiqueta Canvas con Chart.js. Los diagramas se construyen con HTML y CSS (Tailwind).
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .brand-title {
+            color: #003F5C;
+        }
+        .brand-accent {
+            color: #FFA600;
+        }
+        .brand-accent-bg {
+            background-color: #FFA600;
+        }
+        .brand-secondary {
+            color: #BC5090;
+        }
+        .brand-secondary-bg {
+            background-color: #BC5090;
+        }
+        .brand-primary-bg {
+            background-color: #003F5C;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .kpi-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+<body class="text-gray-700">
+
+    <header class="bg-white shadow-md p-6 sm:p-8 text-center">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black brand-title uppercase tracking-wider">Navegando el Clima en Ameca</h1>
+        <h2 class="text-xl sm:text-2xl font-bold brand-accent mt-2">Guía Agroclimática para el Maíz: Julio - Octubre 2025</h2>
+        <p class="max-w-4xl mx-auto mt-4 text-base md:text-lg">
+            Esta temporada presenta un <span class="font-bold">doble desafío</span> para los productores de maíz en Ameca. Se esperan lluvias abundantes, pero con una alta variabilidad. Esto significa que debemos estar preparados tanto para <span class="font-bold brand-secondary">excesos de agua</span> como para <span class="font-bold brand-accent">periodos de sequía</span>. Esta guía visual le ayudará a entender los riesgos y a tomar las mejores decisiones para proteger su cosecha.
+        </p>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <section id="historico" class="mb-12">
+            <h3 class="text-2xl md:text-3xl font-bold text-center brand-title mb-8">1. El Clima que Conocemos: La Base Histórica de Ameca</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-2">
+                    <h4 class="font-bold text-lg mb-2">Precipitación Histórica Mensual (mm)</h4>
+                    <p class="text-sm mb-4">Históricamente, la lluvia se concentra de julio a septiembre, con una caída drástica en octubre. Conocer este patrón nos ayuda a entender qué tan fuera de lo común es el pronóstico actual.</p>
+                    <div class="chart-container">
+                        <canvas id="historicalRainChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h4 class="font-bold text-lg mb-2">Composición del Suelo Dominante</h4>
+                    <p class="text-sm mb-4">El tipo de suelo impacta directamente cómo se maneja el agua. Los <span class="font-bold">Vertisoles</span>, ricos en arcilla, retienen bien la humedad pero drenan lentamente, aumentando el riesgo de encharcamientos.</p>
+                    <div class="chart-container h-[300px] md:h-auto">
+                        <canvas id="soilChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="pronostico" class="mb-12">
+            <h3 class="text-2xl md:text-3xl font-bold text-center brand-title mb-8">2. El Pronóstico 2025: ¿Qué Esperar esta Temporada?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                
+                <div class="bg-white rounded-lg shadow-md p-6 md:col-span-2 lg:col-span-3">
+                    <h4 class="font-bold text-lg mb-2">Pronóstico de Lluvia vs. Días Lluviosos (Jul-Oct)</h4>
+                    <p class="text-sm mb-4">Se espera que agosto sea el mes más húmedo. La clave es la <span class="font-bold">variabilidad</span>: aunque el total de lluvia sea alto, podría venir en eventos intensos y concentrados.</p>
+                    <div class="chart-container">
+                        <canvas id="forecastRainChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="md:col-span-2 lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow-md p-6 text-center flex flex-col justify-center">
+                        <h4 class="font-bold text-lg">Condición ENSO</h4>
+                        <p class="kpi-value brand-accent">Neutral</p>
+                        <p class="text-sm">Esto <span class="font-bold">no significa</span> clima "promedio", sino mayor imprevisibilidad: aguaceros intensos y sequías súbitas.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6 text-center flex flex-col justify-center">
+                        <h4 class="font-bold text-lg">Ciclones Tropicales</h4>
+                        <p class="kpi-value brand-secondary">29-37</p>
+                        <p class="text-sm">Una temporada activa aumenta la probabilidad de lluvias torrenciales que pueden causar inundaciones.</p>
+                    </div>
+                     <div class="bg-white rounded-lg shadow-md p-6 sm:col-span-2 text-center brand-accent-bg text-white">
+                        <h4 class="font-black text-xl">¡ALERTA DE CANÍCULA!</h4>
+                        <p class="mt-2 font-semibold">Existe la posibilidad de una "canícula marcada" en <span class="font-bold">Julio-Agosto</span>. Este periodo seco, aunque breve, puede ser crítico si coincide con la floración del maíz.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        
+        <section id="maiz" class="mb-12">
+            <h3 class="text-2xl md:text-3xl font-bold text-center brand-title mb-8">3. Entendiendo al Maíz: Su Demanda de Agua</h3>
+             <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6 md:col-span-3">
+                    <h4 class="font-bold text-lg mb-2">Consumo de Agua del Maíz por Etapa de Crecimiento</h4>
+                    <p class="text-sm mb-4">El maíz no necesita la misma cantidad de agua siempre. La demanda alcanza su <span class="font-bold">pico absoluto</span> durante la floración y el llenado de grano. El estrés hídrico en esta fase es irreversible.</p>
+                    <div class="chart-container">
+                        <canvas id="cornWaterChart"></canvas>
+                    </div>
+                </div>
+                <div class="md:col-span-2 space-y-8">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h4 class="font-bold text-lg mb-2 brand-accent">Impacto de la Sequía</h4>
+                        <p class="text-sm">El estrés por falta de agua hace que las hojas se enrollen, reduciendo la fotosíntesis y el rendimiento. En 2023, la sequía causó la pérdida de más de <span class="font-bold text-2xl">1 millón de hectáreas</span> de maíz en México.</p>
+                    </div>
+                     <div class="bg-white rounded-lg shadow-md p-6">
+                        <h4 class="font-bold text-lg mb-2 brand-secondary">Impacto del Exceso de Agua</h4>
+                        <p class="text-sm">El suelo saturado ahoga las raíces y provoca la pérdida de nitrógeno. Una planta joven de maíz puede morir en <span class="font-bold text-2xl">menos de 24 horas</span> si está inundada y la temperatura supera los 21°C.</p>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+        <section id="riesgos" class="mb-12">
+            <h3 class="text-2xl md:text-3xl font-bold text-center brand-title mb-8">4. El Doble Riesgo: Preparados para Ambos Extremos</h3>
+            <p class="text-center max-w-3xl mx-auto mb-8">La clave del éxito esta temporada es la <span class="font-bold">gestión proactiva</span>. No podemos controlar la lluvia, pero sí cómo la manejamos en nuestra parcela.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="bg-white rounded-lg shadow-md p-6 border-t-8 border-[#BC5090]">
+                    <h4 class="text-2xl font-bold brand-secondary mb-4">RIESGO: EXCESO DE AGUA</h4>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><span class="font-bold">Causa:</span> Lluvias intensas por ciclones o variabilidad de ENSO-Neutral.</li>
+                        <li><span class="font-bold">Suelo:</span> Los Vertisoles se saturan y encharcan fácilmente.</li>
+                        <li><span class="font-bold">Impacto Directo:</span>
+                            <ul class="list-['-_'] list-inside ml-4 mt-1">
+                                <li>Pudrición de semillas y raíces.</li>
+                                <li>Pérdida masiva de Nitrógeno del suelo.</li>
+                                <li>Mayor riesgo de enfermedades como "cabeza loca".</li>
+                            </ul>
+                        </li>
+                         <li><span class="font-bold">Periodo Crítico:</span> Julio a Septiembre.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6 border-t-8 border-[#FFA600]">
+                     <h4 class="text-2xl font-bold brand-accent mb-4">RIESGO: FALTA DE AGUA</h4>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><span class="font-bold">Causa:</span> Posible "canícula" en julio-agosto o disminución de lluvias en octubre.</li>
+                        <li><span class="font-bold">Temperatura:</span> El calor aumenta la evaporación y la demanda de agua del cultivo.</li>
+                        <li><span class="font-bold">Impacto Directo:</span>
+                            <ul class="list-['-_'] list-inside ml-4 mt-1">
+                                <li>Caída drástica del rendimiento si ocurre en floración.</li>
+                                <li>Mal llenado de grano.</li>
+                                <li>Mayor susceptibilidad a ciertas plagas.</li>
+                            </ul>
+                        </li>
+                        <li><span class="font-bold">Periodo Crítico:</span> Durante la canícula y hacia finales de Septiembre/Octubre.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="accion" class="mb-12">
+             <h3 class="text-2xl md:text-3xl font-bold text-center brand-title mb-8">5. Plan de Acción: Estrategias y Apoyos</h3>
+             <div class="space-y-10">
+                
+                <div>
+                    <h4 class="text-2xl font-bold text-center brand-secondary mb-6">Estrategias para Mitigar el EXCESO de Agua</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 items-center text-center">
+                        <div class="bg-white rounded-lg shadow-md p-4">
+                            <p class="font-bold text-lg">1. Drenaje Eficiente</p>
+                            <p class="text-sm">Crear zanjas o surcos para facilitar el escurrimiento del agua y evitar encharcamientos.</p>
+                        </div>
+                        <div class="flow-arrow hidden md:block">&#10140;</div>
+                        <div class="bg-white rounded-lg shadow-md p-4">
+                            <p class="font-bold text-lg">2. Mejorar el Suelo</p>
+                            <p class="text-sm">Incorporar materia orgánica para mejorar la estructura y la infiltración.</p>
+                        </div>
+                         <div class="flow-arrow hidden md:block">&#10140;</div>
+                        <div class="bg-white rounded-lg shadow-md p-4">
+                            <p class="font-bold text-lg">3. Manejo del Nitrógeno</p>
+                            <p class="text-sm">Considerar aplicaciones fraccionadas para reponer el N perdido por la saturación del suelo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-2xl font-bold text-center brand-accent mb-6">Estrategias para Mitigar la FALTA de Agua</h4>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 items-center text-center">
+                        <div class="bg-white rounded-lg shadow-md p-4">
+                            <p class="font-bold text-lg">1. Cosecha de Agua</p>
+                            <p class="text-sm">Aprovechar apoyos de SADER para captar y almacenar agua de lluvia para uso futuro.</p>
+                        </div>
+                        <div class="flow-arrow hidden md:block">&#10140;</div>
+                        <div class="bg-white rounded-lg shadow-md p-4">
+                            <p class="font-bold text-lg">2. Riego Suplementario</p>
+                            <p class="text-sm">Tener un plan y equipo listos para regar durante la canícula o periodos secos.</p>
+                        </div>
+                         <div class="flow-arrow hidden md:block">&#10140;</div>
+                        <div class="bg-white rounded-lg shadow-md p-4">
+                            <p class="font-bold text-lg">3. Conservar Humedad</p>
+                            <p class="text-sm">Dejar residuos de cosecha en la superficie para reducir la evaporación del suelo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6 mt-10 border-t-8 brand-primary-bg text-white">
+                    <h4 class="text-2xl font-bold text-center mb-4">Recursos Disponibles: ¡Apóyese en SADER!</h4>
+                    <p class="text-center mb-6">La SADER Jalisco ofrece programas que pueden ayudarle a implementar estas estrategias.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                        <div class="bg-gray-800/50 p-3 rounded-lg">
+                            <p class="font-bold">Fertilizantes para el Bienestar</p>
+                            <p class="text-xs mt-1">Apoyo con DAP y UREA.</p>
+                        </div>
+                         <div class="bg-gray-800/50 p-3 rounded-lg">
+                            <p class="font-bold">Cosecha de Agua</p>
+                            <p class="text-xs mt-1">Infraestructura para captación.</p>
+                        </div>
+                         <div class="bg-gray-800/50 p-3 rounded-lg">
+                            <p class="font-bold">Análisis de Suelo</p>
+                            <p class="text-xs mt-1">Para una fertilización precisa.</p>
+                        </div>
+                         <div class="bg-gray-800/50 p-3 rounded-lg">
+                            <p class="font-bold">Sensores y Monitoreo</p>
+                            <p class="text-xs mt-1">Tecnología para decisiones informadas.</p>
+                        </div>
+                    </div>
+                    <p class="text-center mt-6 font-semibold">Consulte los canales oficiales de SADER para más información y sea proactivo.</p>
+                </div>
+
+             </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center p-6 bg-gray-800 text-gray-300 text-sm">
+        <p>Esta infografía es una síntesis del "Perspectiva Agroclimática para el Cultivo de Maíz en Ameca, Jalisco (Julio-Octubre 2025)".</p>
+        <p>Fuentes de datos incluyen IIEG, SMN, CONAGUA, NOAA, IRI, Pioneer, y SADER. Consulte el informe completo para detalles y referencias.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const brandColors = {
+                primary: '#003F5C',
+                secondary: '#BC5090',
+                accent: '#FFA600',
+                lightGray: '#cbd5e1'
+            };
+
+            function wrapLabel(str, maxWidth) {
+                if (typeof str !== 'string' || str.length <= maxWidth) {
+                    return str;
+                }
+                const words = str.split(' ');
+                let lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                    if ((currentLine + ' ' + words[i]).length > maxWidth) {
+                        lines.push(currentLine);
+                        currentLine = words[i];
+                    } else {
+                        currentLine += ' ' + words[i];
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            }
+            
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                }
+                return label;
+            };
+
+            const commonChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                           font: {
+                                size: 12
+                           }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: { size: 10 }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: { size: 10 }
+                        }
+                    }
+                }
+            };
+            
+            const historicalRainCtx = document.getElementById('historicalRainChart').getContext('2d');
+            new Chart(historicalRainCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Julio', 'Agosto', 'Septiembre', 'Octubre'],
+                    datasets: [
+                        {
+                            label: 'Precipitación Media Histórica (mm)',
+                            data: [222.0, 172.5, 139.1, 53.4],
+                            backgroundColor: brandColors.primary,
+                            borderColor: brandColors.primary,
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Máxima Histórica (mm)',
+                            data: [246.1, 189.3, 154.9, 61.8],
+                            backgroundColor: brandColors.lightGray,
+                            borderColor: brandColors.lightGray,
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: commonChartOptions
+            });
+
+            const soilCtx = document.getElementById('soilChart').getContext('2d');
+            new Chart(soilCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Feozem', 'Vertisol', 'Otros'],
+                    datasets: [{
+                        label: 'Tipo de Suelo (%)',
+                        data: [38, 30, 32],
+                        backgroundColor: [brandColors.primary, brandColors.secondary, brandColors.lightGray],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                         tooltip: {
+                            callbacks: {
+                                title: tooltipTitleCallback
+                            }
+                        }
+                    }
+                }
+            });
+
+            const forecastRainCtx = document.getElementById('forecastRainChart').getContext('2d');
+            new Chart(forecastRainCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Julio', 'Agosto', 'Septiembre', 'Octubre'],
+                    datasets: [
+                        {
+                            label: 'Precipitación Pronosticada (mm)',
+                            data: [366, 418, 404, 276],
+                            backgroundColor: brandColors.primary,
+                            yAxisID: 'y',
+                        },
+                        {
+                            label: 'Días de Lluvia Pronosticados',
+                            data: [20, 25, 20, 13],
+                            borderColor: brandColors.accent,
+                            backgroundColor: brandColors.accent,
+                            type: 'line',
+                            yAxisID: 'y1',
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                   responsive: true,
+                   maintainAspectRatio: false,
+                   plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                         tooltip: {
+                            callbacks: {
+                                title: tooltipTitleCallback
+                            },
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                   scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Precipitación (mm)'},
+                            ticks: { font: { size: 10 } }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: 'Días de Lluvia'},
+                             ticks: { font: { size: 10 } },
+                            grid: {
+                                drawOnChartArea: false, 
+                            },
+                        },
+                        x: {
+                             ticks: { font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            const cornWaterCtx = document.getElementById('cornWaterChart').getContext('2d');
+            const originalLabels = ['Vegetativa Temprana', 'Vegetativa Media', 'Vegetativa Tardía', 'Floración (Pico)', 'Llenado de Grano', 'Madurez'];
+            const wrappedLabels = originalLabels.map(label => wrapLabel(label, 16));
+            
+            new Chart(cornWaterCtx, {
+                type: 'line',
+                data: {
+                    labels: wrappedLabels,
+                    datasets: [{
+                        label: 'Uso Diario Promedio de Agua (mm/día)',
+                        data: [1.5, 3.5, 6, 7.6, 6.5, 2.5],
+                        fill: true,
+                        backgroundColor: 'rgba(188, 80, 144, 0.2)',
+                        borderColor: brandColors.secondary,
+                        tension: 0.4
+                    }]
+                },
+                 options: {
+                   responsive: true,
+                   maintainAspectRatio: false,
+                   plugins: {
+                        legend: {
+                            display: false
+                        },
+                         tooltip: {
+                            callbacks: {
+                                title: tooltipTitleCallback
+                            }
+                        }
+                    },
+                   scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Uso de Agua (mm/día)'},
+                             ticks: { font: { size: 10 } }
+                        },
+                        x: {
+                             ticks: { font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
